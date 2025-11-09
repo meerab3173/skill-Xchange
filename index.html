@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillX - Skill Exchange Network</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Frame 1: Home Page -->
+    <div id="frame-home" class="frame">
+        <div class="home-container">
+            <div class="home-content">
+                <h1 class="logo">SkillX</h1>
+                <p class="tagline">Exchange skills, expand possibilities</p>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="showFrame('frame-login')">Login</button>
+                <button class="btn btn-secondary" onclick="showFrame('frame-signup')">Sign Up</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Frame 2: Sign Up Page -->
+    <div id="frame-signup" class="frame hidden">
+        <div class="form-container">
+            <h2>Create Account</h2>
+            <form id="signup-form" onsubmit="handleSignUp(event)">
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">University Email</label>
+                    <input type="email" id="signup-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+            <p class="form-link">Already have an account? <a href="#" onclick="showFrame('frame-login')">Login</a></p>
+        </div>
+    </div>
+
+    <!-- Frame 3: Validation Error State -->
+    <div id="frame-validation-error" class="frame hidden">
+        <div class="form-container">
+            <h2>Create Account</h2>
+            <div class="error-message">
+                <span id="error-text"></span>
+            </div>
+            <form id="retry-form" onsubmit="handleSignUp(event)">
+                <div class="form-group">
+                    <label for="retry-name">Full Name</label>
+                    <input type="text" id="retry-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="retry-email">University Email</label>
+                    <input type="email" id="retry-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="retry-password">Password</label>
+                    <input type="password" id="retry-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Try Again</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Frame 4: Account Exists Alert Modal -->
+    <div id="frame-account-exists" class="frame hidden">
+        <div class="modal-overlay" onclick="showFrame('frame-signup')">
+            <div class="modal" onclick="event.stopPropagation()">
+                <h3>Account Already Exists</h3>
+                <p>An account with this email already exists.</p>
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" onclick="showFrame('frame-login')">Go to Login</button>
+                    <button class="btn btn-outline" onclick="showFrame('frame-signup')">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Frame 5: Registration Success / Dashboard -->
+    <div id="frame-dashboard" class="frame hidden">
+        <div class="dashboard-container">
+            <header class="dashboard-header">
+                <h1>Welcome to SkillX!</h1>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </header>
+            <div class="profile-card">
+                <div class="profile-badge">Needs Completion</div>
+                <h3 id="dashboard-name"></h3>
+                <p id="dashboard-email"></p>
+                <button class="btn btn-primary" onclick="showFrame('frame-edit-profile')">Complete Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Frame 6: Edit Profile Page -->
+    <div id="frame-edit-profile" class="frame hidden">
+        <div class="form-container">
+            <h2>Complete Your Profile</h2>
+            <form id="profile-form" onsubmit="handleProfileSave(event)">
+                <div class="form-group">
+                    <label for="profile-bio">Bio</label>
+                    <textarea id="profile-bio" rows="4" placeholder="Tell us about yourself"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="profile-skills">Skills (comma separated)</label>
+                    <input type="text" id="profile-skills" placeholder="e.g., Python, Web Design, Writing">
+                </div>
+                <div class="form-group">
+                    <label for="profile-interests">Interests (comma separated)</label>
+                    <input type="text" id="profile-interests" placeholder="e.g., AI, Startups, Education">
+                </div>
+                <div class="form-group">
+                    <label for="profile-contact">Contact Info</label>
+                    <input type="text" id="profile-contact" placeholder="Phone or other contact">
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Frame 7: Login Page -->
+    <div id="frame-login" class="frame hidden">
+        <div class="form-container">
+            <h2>Login</h2>
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="button" class="btn btn-link" onclick="showFrame('frame-forgot-password')">Forgot Password?</button>
+            </form>
+            <p class="form-link">Don't have an account? <a href="#" onclick="showFrame('frame-signup')">Sign Up</a></p>
+        </div>
+    </div>
+
+    <!-- Frame 8: Forgot Password Page -->
+    <div id="frame-forgot-password" class="frame hidden">
+        <div class="form-container">
+            <h2>Reset Password</h2>
+            <p class="form-description">Enter your email address to receive a password reset link.</p>
+            <form id="reset-form" onsubmit="handleForgotPassword(event)">
+                <div class="form-group">
+                    <label for="reset-email">Email Address</label>
+                    <input type="email" id="reset-email" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Reset Link</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Frame 9: Reset Success Page -->
+    <div id="frame-reset-success" class="frame hidden">
+        <div class="success-container">
+            <div class="success-icon">✓</div>
+            <h2>Reset Link Sent</h2>
+            <p>Password reset link has been sent to your email. Check your inbox and follow the instructions.</p>
+            <button class="btn btn-primary" onclick="showFrame('frame-login')">Back to Login</button>
+        </div>
+    </div>
+
+    <!-- Frame 10: Unfamiliar Device Alert Modal -->
+    <div id="frame-device-alert" class="frame hidden">
+        <div class="modal-overlay" onclick="dismissDeviceAlert()">
+            <div class="modal" onclick="event.stopPropagation()">
+                <h3>Security Alert</h3>
+                <p>Login attempt detected from a new device. Is this you?</p>
+                <div class="modal-buttons">
+                    <button class="btn btn-primary" onclick="verifyDevice()">Verify Device</button>
+                    <button class="btn btn-secondary" onclick="showFrame('frame-login')">Back to Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
